@@ -230,3 +230,19 @@ On CentOS 6.3: glibc-devel.i686
 
 What's more, Ubuntu has integrated package, like g++-multilib and build-essential. While RedHat doesn't have.
 
+
+
+# 6. Compile and run C++ program
+
+As we installed some libraries locally, you can add commands similar to the following in "~/.bash\_profile":
+
+```
+# this is for compiling and running c++ program
+export LD_LIBRARY_PATH=/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-cloog-0.18.1/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gmp-4.3.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-isl-0.12.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-mpfr-2.4.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-mpc-0.8.1/lib:/opt/gridengine/hpc/lib/lx-amd64
+
+# this is for Python package (Canopy)
+export PATH=/ifs/scratch/c2b2/ip_lab/sy2515/Canopy/appdata/canopy-1.5.2.2785.rh5-x86_64/bin:$PATH
+```
+
+By now, you should be able to compile your c++ code with the newly installed gcc, and run it in the cluster.
+
