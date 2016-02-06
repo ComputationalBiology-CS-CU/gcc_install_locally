@@ -41,44 +41,160 @@ As you need libstdc++ and glibc (for g++ and gcc), it's recommended to use the f
 apt-get install gcc g++ make libc6-dev
 ```
 
-
-
 ### 3.1.2. Libraries
 
+According to the official document, if you only want to install gcc other than revising it, you only need 5 third-party libraries.
 
+They are grouped two classes: one (gmp, mpc, mpfr) can be automatically compiled when compiling gcc (downloaded the source code before and dropped them in the right places); the other (isl, cloog) needs to be installed independently.
 
+Please prefer the version that are for development (has header files, and the library names always have "dev" or "devel").
 
 ### 3.1.3. Practical operations
-
 
 #### 3.1.3.1. Check whether they are installed already
 
 
+If you want to check whether library XXX has been installed, use:
 
+```
+locate libXXX
+```
+
+If you can find libXXX.so, then it's installed already.
 
 
 #### 3.1.3.2. Install libraries that were not installed before
 
+For (gmp, mpc, mpfr), run the following in the root directory of the unpacked gcc source package:
 
+```
+./contrib/download_prerequisites
+```
 
+This will download the source packages and unpack them, and create their symbolic links. According to the rulls of compiling gcc, if there are directories of gmp, mpc and mpfr, they will be automatically compiled when you compile gcc. (**Shuo**: I downloaded all the 5 packages manually and make them separately; there might be some problems if you make them automatically, though not sure).
+
+For (isl, cloog), you can compile yourself (please refer to their official documents). If in Ubuntu, it's recommended to install them with the following command (as cloog depends on gmp and isl, and you need to configure correctly before making them):
+
+```
+apt-get intall libisl-dev libcloog-isl3
+```
+In specific enviroment you might need to revise the names of the libraries. You can check with "Tab" after typing "libisl" or "libcloog" (the same for things below).
 
 #### 3.1.3.3. Install other libraries
 
+If you want your gcc compiler to generate 32-bit programs even in 64-bit platform, you need the 32-bit running libraries, and these libraries are normally not installed in 64-bit system by default.
 
+In Ubuntu, you can use the following simple method:
 
-
+```
+apt-get install gcc-multilib g++-multilib
+```
+In Fedora, you can use:
+```
+apt-get install glibc-devel.i686 libstdc++-devel.i686
+```
 
 ## 3.2. Configure
 
+### 3.2.1. Build the compiling directory
+
+In the root directory of unpacked gcc package, create a temporary folder to save the "\*.o" files when compiling:
+```
+mkdir build
+cd build
+```
+
+### 3.2.2. Configure
+
+Enter the above temporary folder, call the **configure** in the root directory (of the unpacked gcc package) with other parameters. Here are some sample introductions:
+
+```
+--prefix
+```
+This is for setting the root folder that will save the excutable and libraries after "make install". For example, if "--prefix=/usr", then the generated gcc and g++ will be save under "/usr/bin", and generated lib will be save under "/usr/lib". If you want to substitute the original gcc and lib, then use the root directory that you find through "which gcc". By default, "--prefix" is set to "/usr/local". You can use "update-alternatives" to configure which gcc to use by default when you have several gcc.
+
+```
+--program-prefix
+--program-suffix
+```
+Give a prefix and suffix for the generated gcc. For example, "--program-prefix=my- --program-suffix=-4.8.1" will generate "my-gcc-4.8.1".
+```
+--disable-multilib
+```
+Make the generated gcc a native compiler (the program it compiles will only be able to run in this local machine). For 64-bit system, this option is by default closed, meaning that by default the generated gcc can compile a 32-bit program or 64-bit program (with -m32). So you need to install gcc-multilib（glibc-devel.i686) first of all. For the 32-bit system, this option is opened by default, meaning gcc won't be able to compile a 64-bit program.
+```
+--enable-languages
+```
+This will specify the languages that are supported by the compiled gcc. As many people only use c and c++ from gcc, you don't have to configure other languages (I didn't). That also says, this tutorial might have some problems for compiling other languages with our installed gcc.
+```
+--with-gmp
+--with-mpfr
+--with-mpc
+--with-isl
+--with-cloog
+--with-gmp-include
+--with-gmp-lib
+
+```
+If you have installed some libraries above, and they are not in the standard lib path that will be searched, you need to set the path manually (this won't be a problem for the automatically compiled libraries). "--with-XXX=YYY" is equal to "--with-XXX-include=YYY/include" and "--with-XXX-lib=YYY/lib".
+
+
+Some examples:
+Let's assume the current system is 64-bit, and the current gcc is under "/usr/bin". You can use the following to have a local gcc that support c and c++ while still preserving the old gcc:
+```
+../configure --prefix=/usr/local --disable-multilib --enable-languages=c,c++
+```
+
+If you want to compile 32-bit program, support c and c++, and cover the old gcc, and you have installed gmp under "/usr/gmp-5.1.3/", you can use the following:
+```
+../configure --prefix=/usr --enable-languages=c,c++ --with-gmp=/usr/gmp-5.1.3
+```
+
+### 3.2.3. Check
+
+Even there are some issues, the Makefile will be successfully generated by configure. However, these issues might affect the "make" process afterwards. So we need to check before making.
+
+Open the file "config.log" that is generated with the "Makefile", and search for "error". Normally, you should only find some errors in condition information (like -Werror), or something like not supporting "-V" for the gcc when you try "gcc -V". These errors are minor. But if you can't find some files that you try to include, then it's a preventing problem.
+
+For example, if "#include<isl/xxx.h>" has errors, that probably means you didn't install libisl-dev. If you only have a excutable libisl, you need to provide the corresponding header files by yourself. You can download the source code from official website, and pick up the header files to put in the system "include" path. Or you can specify that with "--with-isl-include=XXXX".
 
 
 ## 3.3. Make
 
+Simply run:
+```
+sudo make -j4
+```
+
+For a better machine, you can use a larger number for the number after "-j".
+If there are no problems, run:
+
+```
+sudo make install
+```
+This will install the compiled excutable file into the path that is configured before.
+
+Two more things to mention:
+
+1. gcc doesn't support "make unintall", so you should be careful if you want to cover the old gcc;
+2. if you configured system path, for this step please run with root authority, otherwise it will be horrible.
 
 
 ## 3.4. Afterwards
 
+If you want to have two gcc with different versions, you can definitely call the compiler with full path to it. But that seems complex.
 
+It's recommended that you use "update-alternatives" to make the system know which gcc we mean to call when only typing "gcc" (please Google more for "update-alternatives").
+
+For example, the newly compiled gcc is under "/usr/local/bin/gcc", and I will set a 100 priority score:
+```
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc 100
+```
+Then I can use the following to check which gcc the system chooses to use (in "auto" option, the one with higher priority will be chosen):
+```
+sudo update-alternatives --config gcc
+```
+If the system doesn't automatically chooses the one we want, we can manually set their priority scores, or we can manually set the default one.
 
 
 # 4. Ubuntu shell commands
@@ -88,7 +204,7 @@ Unpack gcc, and enter its folder.
 ```
 sudo apt-get install gcc g++ make
 sudo apt-get install libisl-dev libcloog-isl-dev
-#若希望在64位系统下编译出32位应用程序（反之亦然），需要执行下面命令
+# if you want to compile 32-bit program in 64-bit system, then run the following:
 sudo apt-get install gcc-multilib g++-multilib
 
 sudo ./contrib/download_prerequisites
@@ -103,16 +219,14 @@ sudo make -j4sudo make install
 
 The major differences are the names of different packages, and the package manager.
 
-在升级gcc个过程中，主要区别就在于包的名字和包管理器的不同。
+Packages of Ubuntu family (Debian) are named differently from those of RedHat family (CentOS, Fedora). Here are some example for 32-bit glibc:
 
-Ubuntu系（Debian）的包名和RedHat系（CentOS、Fedora）的在命名规则上不太一样。前缀洗好加版本号，开发版缩写为“dev”，用“-”连接架构；而后者的开发版缩写为”devel“，用”.“连接架构。
-例如在安装32位的glibc的时候所使用的报名：
+```
 On Ubuntu: libc6-dev-i386.
 On Red Hat distros: glibc-devel.i686
 On CentOS 5.8: glibc-devel.i386
 On CentOS 6.3: glibc-devel.i686
+```
 
-其次Ubuntu系有很多整合了的包，例如g++-multilib，build-essential等，而ReadHat系没有。
-
-
+What's more, Ubuntu has integrated package, like g++-multilib and build-essential. While RedHat doesn't have.
 
