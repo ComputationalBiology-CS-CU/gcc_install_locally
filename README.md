@@ -16,7 +16,54 @@ This is a general introduction to the whole procedure.
 
 # 3. Detailed procedure
 
+Please refer to the official document [official document](http://gcc.gnu.org/install/) (gcc) as much as possible.
+
 ## 3.1. Install dependency and other tools
+
+### 3.1.1. Tools
+
+They are: g++, make, perl, unpacking tools (tar, gzip, etc.), Binutils (only under certain circumstances). Most probably you don't need to worry them too much, as they were pre-installed in most of the current Linux systems. The only thing you need to pay attention to is the c/c++ environment.
+
+If you are sure that your system has gcc and g++, you can jump this step.
+
+Practically, for Ubuntu, do the following:
+
+```
+apt-get install build-essential
+```
+which will at the same time install other necessary libraries, like glibc for development (libc-dev in Ubuntu).
+
+Other Linux platforms usually don't have such integrated package (build-essential), so you need to install them one by one.
+
+As you need libstdc++ and glibc (for g++ and gcc), it's recommended to use the following commend to avoid some troubles:
+
+```
+apt-get install gcc g++ make libc6-dev
+```
+
+
+
+### 3.1.2. Libraries
+
+
+
+
+### 3.1.3. Practical operations
+
+
+#### 3.1.3.1. Check whether they are installed already
+
+
+
+
+
+#### 3.1.3.2. Install libraries that were not installed before
+
+
+
+
+#### 3.1.3.3. Install other libraries
+
 
 
 
