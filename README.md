@@ -6,10 +6,34 @@ reference: [this](http://blog.csdn.net/yanxiangtianji/article/details/12511961) 
 
 # 2. General procedure
 
+This is a general introduction to the whole procedure.
+
+1. install dependency and tools.
 
 xxx
 
+2. xxx
+
 xxx
+
+
+
+
+
+1，安装依赖库和工具
+根据官方文档，如果只是为了编译安装而不是去修改gcc，那么所需要的库和工具并不是很多。
+需要强调的有两点：
+1）需要一个c++编译器，也就是说如果只有gcc而无g++，那么是无法完成这次编译的；
+2）如果机器是64位系统同时又希望生成的编译器除了可以编译出默认的可在本机运行的64位可执行文件还可以编译出32位的可执行文件的话，需要额外安装相应的库（默认开启）。
+
+2，配置（configure）
+配置我们编译出的gcc所支持的语言，目标环境（是否为交叉编译器），依赖库路径（一定条件下可省略，下详），编译结果安装到哪里等。配置程序会根据这些信息生产Makefile文件，供下一步使用。
+
+3，编译（make）
+根据configure生成的Makefile编译出我们的gcc和相应的lib如libstdc++等。
+
+
+
 
 
 # 3. Detailed procedure
