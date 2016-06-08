@@ -237,11 +237,17 @@ As we installed some libraries locally that might be linked dynamically, you can
 
 ```
 # this is for dynamically linking for c++ programs
-export LD_LIBRARY_PATH=/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-cloog-0.18.1/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gmp-4.3.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-isl-0.12.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-mpfr-2.4.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-mpc-0.8.1/lib:/opt/gridengine/hpc/lib/lx-amd64
+export LD_LIBRARY_PATH=/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/lib64:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-cloog-0.18.1/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gmp-4.3.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-isl-0.12.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-mpfr-2.4.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-mpc-0.8.1/lib:/opt/gridengine/hpc/lib/lx-amd64
 
 # this is for calling local gcc and local Python (Canopy)
 export PATH=/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/bin:/ifs/scratch/c2b2/ip_lab/sy2515/Canopy/appdata/canopy-1.5.2.2785.rh5-x86_64/bin:$PATH
+
+# GPU complier and env setting
+ROOT=/nfs/apps/cuda/7.5.18
+
+export PATH=$ROOT/bin:$PATH
+export LD_LIBRARY_PATH=$ROOT/lib64:$LD_LIBRARY_PATH
 ```
 
-By now, you should be able to compile your c++ code with the newly installed gcc, and run it in the cluster. (please compile and run in computing node other than login node, as it seems there is no default gcc in login node thus lacking other necessary libraries to compile a program)
+By now, you should be able to compile your c++ code (also CUDA C/C++ code) with the newly installed gcc (or nvcc in the system), and run it in the cluster. (please compile and run in computing node other than login node, as it seems there is no default gcc in login node thus lacking other necessary libraries to compile a program; also, please run GPU jobs only by submitting them to GPU nodes, as you can't login to a GPU node).
 
