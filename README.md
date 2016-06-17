@@ -239,8 +239,9 @@ As we installed some libraries locally that might be linked dynamically, you can
 # this is for dynamically linking for c++ programs
 export LD_LIBRARY_PATH=/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/lib64:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-cloog-0.18.1/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gmp-4.3.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-isl-0.12.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-mpfr-2.4.2/lib:/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-mpc-0.8.1/lib:/opt/gridengine/hpc/lib/lx-amd64
 
-# this is for calling local gcc and local Python (Canopy)
-export PATH=/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/bin:/ifs/scratch/c2b2/ip_lab/sy2515/Canopy/appdata/canopy-1.5.2.2785.rh5-x86_64/bin:$PATH
+# this is for calling local gcc and local Python (Canopy, or Anaconda)
+#export PATH=/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/bin:/ifs/scratch/c2b2/ip_lab/sy2515/Canopy/appdata/canopy-1.5.2.2785.rh5-x86_64/bin:$PATH
+export PATH=/ifs/scratch/c2b2/ip_lab/sy2515/HPC/shuo-gcc-4.9.1/bin:/ifs/scratch/c2b2/ip_lab/sy2515/anaconda/bin:$PATH
 
 # GPU complier and env setting
 ROOT=/nfs/apps/cuda/7.5.18
